@@ -1,19 +1,19 @@
-# %%writefile main.py
 from fastapi import FastAPI
 import numpy as np
 import tensorflow as tf
 from keras.models import load_model
+from keras.losses import MeanSquaredError
 from pydantic import BaseModel
 
 # Initialize FastAPI app
 app = FastAPI()
 
-# Load the trained model
-model = load_model("model.h5")
+# Load the trained model with custom objects
+model = load_model("model.h5", custom_objects={"mse": MeanSquaredError()})
 
 # Define the input data structure
 class InputData(BaseModel):
-    data: list  # Expecting a list of numbers
+    data: list
 
 # Define a route for prediction
 @app.post("/predict")
